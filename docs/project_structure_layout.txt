@@ -1,0 +1,26 @@
+quicasses-backend/
+│── app/
+│   ├── __init__.py         # Initializes Flask app & database
+│   ├── config.py           # Configuration settings (Database, JWT, CORS, etc.)
+│   ├── models.py           # Database models (SQLAlchemy ORM)
+│   ├── routes/
+│   │   ├── __init__.py     # Imports all route Blueprints
+│   │   ├── auth.py         # User authentication routes (Register/Login)
+│   │   ├── assessment.py   # Routes for creating/taking assessments
+│   │   ├── user.py         # User-related routes (profile, history)
+│   │   ├── admin.py        # Admin-only routes (manage users/assessments)
+│   ├── services/
+│   │   ├── __init__.py     # Imports all service utilities
+│   │   ├── ocr_service.py  # OCR-based question parsing logic
+│   │   ├── assessment_service.py  # Business logic for assessment handling
+│   ├── utils/
+│   │   ├── __init__.py     # Imports all utilities
+│   │   ├── auth_helper.py  # JWT-related utilities (token encoding/decoding)
+│   │   ├── validation.py   # Input validation utilities
+│── migrations/             # Auto-generated migration files (by Flask-Migrate)
+│── tests/                  # Unit & integration tests
+│── .env                    # Environment variables (Database URL, JWT secret, etc.)
+│── requirements.txt         # Python dependencies
+│── run.py                   # Entry point for the application
+│── wsgi.py                  # WSGI entry point (for production deployment)
+│── README.md                # Project documentation
