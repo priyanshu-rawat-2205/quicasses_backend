@@ -1,9 +1,16 @@
+import os
+
 DB_USERNAME = 'priyanshu-local'
 DB_PASSWORD = ''
 DB_HOST = '127.0.0.1'
 DB_PORT = '3306'
 DB_NAME = 'quicasses'
 
+UPLOAD_DIR = os.path.join(os.getcwd(), 'uploads')
+ALLOWED_EXTENSIONS = {'json', 'csv', 'pdf', 'png', 'jpg'}
+
+if not os.path.exists(UPLOAD_DIR):
+    os.makedirs(UPLOAD_DIR)
 
 class Config:
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"

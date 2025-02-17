@@ -1,6 +1,7 @@
 from flask import Blueprint, Flask, jsonify
 from .auth import auth_bp
 from .assessment import assessment_bp
+from .file_upload import file_upload_bp
 
 main_bp = Blueprint('main', __name__,)
 
@@ -12,4 +13,5 @@ def register_blueprints(app: Flask):
     app.register_blueprint(main_bp, url_prefix='/api')
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(assessment_bp, url_prefix='/api/assessment')
+    app.register_blueprint(file_upload_bp, url_prefix='/api/file-upload')
     
