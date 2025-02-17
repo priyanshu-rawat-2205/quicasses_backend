@@ -39,8 +39,8 @@ def login():
     if not user or not user.verify_password(data['password']):
         return jsonify({'msg': 'Invalid username or password'})
     
-    access_token = create_access_token(identity=user.email, expires_delta=timedelta(hours=24))
-    refresh_token = create_refresh_token(identity=user.email)
+    access_token = create_access_token(identity=user.uuid, expires_delta=timedelta(hours=24))
+    refresh_token = create_refresh_token(identity=user.uuid)
     
     return jsonify({
         'msg':'Login successful',

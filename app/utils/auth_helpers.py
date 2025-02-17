@@ -7,7 +7,7 @@ def redirect_if_authenticated(fn):
     def wrapper(*args, **kwargs):
         try:
             verify_jwt_in_request()
-            return jsonify({"message": "You are already logged in!"}), 403 
+            return jsonify({"msg": "You are already logged in!"}), 403 
         except Exception:
             return fn(*args, **kwargs)
     return wrapper
