@@ -32,12 +32,12 @@ def login():
     data = request.json
 
     if not data or not data.get('email') or not data.get('password'):
-        return jsonify({'msg':'Invalid input'})
+        return jsonify({'msg':'Invalid input'}), 400
     
     user = User.query.filter_by(email=data['email']).first()
     
     if not user or not user.verify_password(data['password']):
-        return jsonify({'msg': 'Invalid username or password'})
+        return jsonify({'msg': 'Invalid username or password'}), 400
     
     access_token = create_access_token(identity=user.uuid, expires_delta=timedelta(hours=24))
     refresh_token = create_refresh_token(identity=user.uuid)
@@ -46,7 +46,7 @@ def login():
         'msg':'Login successful',
         'access_token':access_token,
         'refresh_token': refresh_token
-    })
+    }), 200
 
 
 @auth_bp.route('/logout', methods=['POST'])
