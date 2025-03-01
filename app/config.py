@@ -1,10 +1,16 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+API_KEY = os.getenv('API_KEY')
 
 DB_USERNAME = 'priyanshu-local'
 DB_PASSWORD = ''
 DB_HOST = '127.0.0.1'
 DB_PORT = '3306'
 DB_NAME = 'quicasses'
+
+
 
 UPLOAD_DIR = os.path.join(os.getcwd(), 'uploads')
 ALLOWED_EXTENSIONS = {'json', 'csv', 'pdf', 'png', 'jpg'}

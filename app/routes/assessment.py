@@ -6,7 +6,7 @@ assessment_bp = Blueprint('assessment', __name__)
 @assessment_bp.route('/', methods=['POST'])
 @jwt_required()
 def create():
-    from app.models import db, Assessment
+    from app.models import db, Assessment, User
 
     data = request.get_json()
 
@@ -14,8 +14,11 @@ def create():
         return jsonify({'msg':'title and questions are required'}), 400
     
     user_uuid = get_jwt_identity()
+    user = User.query.get(user_uuid)
+    if not user:
+        return jsonify({'msg':'User not found'}), 404
 
-    new_assessment = Assessment(title=data.get('title'), description=data.get('description'), creator_id=user_uuid, questions=data.get('questions'))
+    new_assessment = Assessment(title=data.get('title'), description=data.get('description'), creator_id=str(user_uuid), questions=data.get('questions'))
 
     db.session.add(new_assessment)
     db.session.commit()
