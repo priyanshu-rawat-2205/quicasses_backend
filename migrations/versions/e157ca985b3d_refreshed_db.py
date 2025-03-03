@@ -1,8 +1,8 @@
-"""refreshed everything
+"""refreshed db
 
-Revision ID: 7ff869186067
+Revision ID: e157ca985b3d
 Revises: 
-Create Date: 2025-02-28 00:52:52.961592
+Create Date: 2025-03-03 12:17:36.571801
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mssql
 
 # revision identifiers, used by Alembic.
-revision = '7ff869186067'
+revision = 'e157ca985b3d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -35,6 +35,7 @@ def upgrade():
     sa.Column('questions', mssql.JSON(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('time_limit', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['creator_id'], ['user.uuid'], ),
     sa.PrimaryKeyConstraint('uuid'),
     sa.UniqueConstraint('uuid')
@@ -49,7 +50,7 @@ def upgrade():
     sa.Column('submitted_at', sa.DateTime(), nullable=False),
     sa.Column('answers', mssql.JSON(), nullable=False),
     sa.ForeignKeyConstraint(['assessment_uuid'], ['assessment.uuid'], ondelete='CASCADE'),
-    sa.ForeignKeyConstraint(['user_id'], ['user.uuid'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.uuid'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

@@ -5,7 +5,7 @@ from app import db
 class AssessmentResult(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     assessment_uuid = db.Column(db.String(36), db.ForeignKey('assessment.uuid', ondelete='CASCADE'), nullable=False)
-    user_id = db.Column(db.String(36), db.ForeignKey('user.uuid', ondelete="CASCADE"), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.uuid'), nullable=False)
     total_questions = db.Column(db.Integer, nullable=False)
     correct_answers = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Float, nullable=False)  
@@ -13,7 +13,6 @@ class AssessmentResult(db.Model):
     answers = db.Column(JSON, nullable=False)
 
     user = db.relationship("User", backref="assessment_results")
-    assessment = db.relationship('Assessment', backref=db.backref('results', lazy=True))
 
     def to_dict(self):
         """Convert object to dictionary for API response"""

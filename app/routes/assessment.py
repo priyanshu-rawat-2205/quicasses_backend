@@ -18,7 +18,13 @@ def create():
     if not user:
         return jsonify({'msg':'User not found'}), 404
 
-    new_assessment = Assessment(title=data.get('title'), description=data.get('description'), creator_id=str(user_uuid), questions=data.get('questions'))
+    new_assessment = Assessment(
+        title=data.get('title'), 
+        description=data.get('description'), 
+        creator_id=str(user_uuid), 
+        questions=data.get('questions'), 
+        time_limit=data.get('time_limit')
+    )
 
     db.session.add(new_assessment)
     db.session.commit()
@@ -55,6 +61,7 @@ def update(uuid):
     assessment.title = data.get("title", assessment.title)
     assessment.description = data.get("description", assessment.description)
     assessment.questions = data.get("questions", assessment.questions)
+    assessment.time_limit = data.get("time_limit", assessment.time_limit)
 
     db.session.commit()
     return jsonify(assessment.to_dict()), 200
@@ -93,54 +100,15 @@ def read_my_assessments():
         "title": assessment.title,
         "description": assessment.description,
         "questions": assessment.questions,
-        "created_at": assessment.created_at
+        "created_at": assessment.created_at,
+        "time_limit": assessment.time_limit
     } for assessment in assessments]), 200
 
 
 @assessment_bp.route('/submit-assessment', methods=['POST'])
 @jwt_required()
 def submit_assessment():
-    from app.models import Assessment, db, AssessmentResult
-
-    # data = request.json
-    # assessment_id = data.get("uuid")
-    # user_id = get_jwt_identity()
-    # user_answers = data.get("answers")  # { questionIndex: selectedOptionIndex }
-
-    # if not assessment_id or user_answers is None:
-    #     return jsonify({"error": "Invalid data"}), 400
-
-    # # assessment = assessments.get(assessment_id)
-    # assessment = Assessment.query.filter_by(uuid=assessment_id).first()
-
-    # if not assessment:
-    #     return jsonify({"error": "Assessment not found"}), 404
-
-    # correct_count = 0
-    # total_questions = len(assessment.questions)
-
-    # for idx, question in enumerate(assessment.questions):
-    #     correct_option = question["correctOption"]
-    #     selected_option = user_answers.get(str(idx))
-
-    #     if selected_option == correct_option:
-    #         correct_count += 1
-
-    # # score = (correct_count / total_questions) * 100  # Percentage score
-    # score = (correct_count / total_questions) * 100 if total_questions > 0 else 0
-
-    # result = AssessmentResult(
-    #     assessment_uuid=assessment_id,
-    #     user_id=user_id,
-    #     total_questions=total_questions,
-    #     correct_answers=correct_count,
-    #     score=score
-    # )
-
-    # db.session.add(result)
-    # db.session.commit()
-
-    # return jsonify(result.to_dict()), 200
+    from app.models import Assessment, db, AssessmentResult, User
 
     current_user = get_jwt_identity()
     data = request.json  # Expecting {"answers": [{"question_id": 1, "selected_option": 2}, ...]}
@@ -150,6 +118,10 @@ def submit_assessment():
     assessment = Assessment.query.get(assessment_id)
     if not assessment:
         return jsonify({"error": "Assessment not found"}), 404
+    
+    user = User.query.get(current_user)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
 
     # Calculate Score
     total_questions = len(assessment.questions)
@@ -160,7 +132,7 @@ def submit_assessment():
         selected_option = user_answer["selected_option"]
         
         # Find the correct answer for the question
-        question = next((q for q in assessment.questions if q.get("question_id") == question_id), None)
+        question = assessment.questions[question_id] if question_id < len(assessment.questions) else None
         if question and question["correct_option"] == selected_option:
             correct_answers += 1
 

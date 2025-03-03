@@ -11,14 +11,17 @@ class Assessment(db.Model):
     questions = db.Column(JSON, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
+    time_limit = db.Column(db.Integer, nullable=True)
+    results = db.relationship('AssessmentResult', backref='assessment', cascade='all, delete-orphan', passive_deletes=True)
 
-    creator = db.relationship('User', backref='assessment')
+    creator = db.relationship('User', backref='assessments')
 
-    def __init__(self, title, description, creator_id, questions):
+    def __init__(self, title, description, creator_id, questions, time_limit=0):
         self.title = title
         self.description = description
         self.creator_id = creator_id
         self.questions = questions
+        self.time_limit = time_limit
 
     def to_dict(self):
         """Convert model instance to dictionary."""
@@ -30,4 +33,5 @@ class Assessment(db.Model):
             "questions": self.questions,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
+            'time_limit': self.time_limit
         }
