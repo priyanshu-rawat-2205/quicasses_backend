@@ -138,12 +138,11 @@ def submit_assessment():
 
     score = (correct_answers / total_questions) * 100 if total_questions > 0 else 0
 
-    # Save the assessment result along with answers
     assessment_result = AssessmentResult(
         assessment_uuid=assessment_id,
         user_id=current_user,
         score=score,
-        answers=data.get("answers", []),  # Store answers as JSON
+        answers=data.get("answers", []),
         total_questions=total_questions,
         correct_answers=correct_answers
     )
@@ -162,7 +161,6 @@ def get_assessment_results(uuid):
     user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
-    user_name = user.username
     
     assessment = Assessment.query.get(uuid)
     if not assessment:
@@ -182,7 +180,7 @@ def get_assessment_results(uuid):
     return jsonify([{
         'assessment_uuid': result.assessment_uuid,
         'assessment_title': assessment_title,
-        'submitted_by': user_name,
+        'submitted_by': result.user.username,
         'user_id': result.user_id,
         'total_questions': result.total_questions,
         'correct_answers': result.correct_answers,

@@ -3,13 +3,13 @@ from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from app.routes import register_blueprints
-from app.config import Config
+from app.config import Config, r_host, r_port
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 
 
 db = SQLAlchemy()
-redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
+redis_client = redis.StrictRedis(host=r_host, port=r_port, db=0, decode_responses=True)
 jwt = JWTManager()
 
 def create_app():

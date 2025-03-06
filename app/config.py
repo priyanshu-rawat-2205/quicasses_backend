@@ -9,6 +9,8 @@ DB_PASSWORD = os.getenv('DB_PASSWORD', '')
 DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
 DB_PORT = os.getenv('DB_PORT', '3306')
 DB_NAME = os.getenv('DB_NAME', 'quicasses')
+r_host = os.getenv('REDIS_HOST', 'localhost')
+r_port = os.getenv('REDIS_PORT', 6379)
 
 
 
@@ -23,8 +25,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'your_secret_key')
     JWT_ALGORITHM = "HS256" 
-    REDIS_HOST = 'localhost'
-    REDIS_PORT = '6379'
+    REDIS_HOST = r_host
+    REDIS_PORT = r_port
     REDUS_DB = 0
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
